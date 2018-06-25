@@ -1,0 +1,9 @@
+CREATE TABLE [dbo].[tally]
+(
+[n] [int] NOT NULL
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[tally] ADD CONSTRAINT [pk_cl_tally] PRIMARY KEY CLUSTERED  ([n]) WITH (FILLFACTOR=100) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[tally] ADD CONSTRAINT [uq_dbo_tally] UNIQUE NONCLUSTERED  ([n]) ON [PRIMARY]
+GO

@@ -1,0 +1,9 @@
+CREATE TABLE [dbo].[Table1]
+(
+[someId] [int] NOT NULL IDENTITY(1, 1),
+[col1] [varchar] (8000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[col2] [int] NULL
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Table1] ADD CONSTRAINT [PK__Table1__508F89758D668B7B] PRIMARY KEY CLUSTERED  ([someId]) ON [PRIMARY]
+GO

@@ -1,0 +1,9 @@
+CREATE TABLE [dbo].[tally10M]
+(
+[N] [int] NOT NULL
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[tally10M] ADD CONSTRAINT [pk_cl_dbo_tally10M__N] PRIMARY KEY CLUSTERED  ([N]) ON [PRIMARY]
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [nc_uq_dbo_tally10M__N] ON [dbo].[tally10M] ([N]) ON [PRIMARY]
+GO

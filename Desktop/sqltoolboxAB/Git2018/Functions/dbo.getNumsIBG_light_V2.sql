@@ -1,0 +1,16 @@
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_NULLS ON
+GO
+
+CREATE FUNCTION [dbo].[getNumsIBG_light_V2](@low bigint, @high bigint)
+RETURNS TABLE AS RETURN
+WITH
+  L0   AS (SELECT c FROM (VALUES(1),(1)) AS D(c)),         -- 2
+  L1   AS (SELECT 1 AS c FROM L0 AS A CROSS JOIN L0 AS B), -- 4
+  L2   AS (SELECT 1 AS c FROM L1 AS A CROSS JOIN L1 AS B), -- 16
+  Nums AS (SELECT ROW_NUMBER() OVER(ORDER BY (SELECT NULL)) AS rn FROM L2)
+SELECT TOP (@high - @low + 1) rn, @low + rn - 1 AS n
+FROM Nums
+ORDER BY rn;
+GO
