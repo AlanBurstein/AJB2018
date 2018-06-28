@@ -1,0 +1,6 @@
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_NULLS ON
+GO
+    CREATE PROC [dbo].[A] @x varchar(10) AS SELECT @x FROM (VALUES (1),(1),(1))x(x);
+GO
