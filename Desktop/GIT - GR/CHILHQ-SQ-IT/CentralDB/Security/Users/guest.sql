@@ -1,0 +1,1 @@
+GRANT CONNECT TO [guest]

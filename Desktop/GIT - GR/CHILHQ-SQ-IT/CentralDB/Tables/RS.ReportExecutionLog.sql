@@ -1,0 +1,30 @@
+CREATE TABLE [RS].[ReportExecutionLog]
+(
+[ServerName] [nvarchar] (128) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[InstanceName] [nvarchar] (38) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[LogEntryId] [bigint] NOT NULL,
+[ReportPath] [nvarchar] (425) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ReportName] [nvarchar] (425) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ReportType] [int] NOT NULL,
+[ReportID] [uniqueidentifier] NULL,
+[UserName] [nvarchar] (260) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ExecutionId] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[RequestType] [tinyint] NOT NULL,
+[Format] [nvarchar] (26) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Parameters] [ntext] COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReportAction] [tinyint] NULL,
+[TimeStart] [datetime] NOT NULL,
+[TimeEnd] [datetime] NOT NULL,
+[TimeDataRetrieval] [int] NOT NULL,
+[TimeProcessing] [int] NOT NULL,
+[TimeRendering] [int] NOT NULL,
+[Source] [tinyint] NOT NULL,
+[Status] [nvarchar] (40) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ByteCount] [bigint] NOT NULL,
+[RowCount] [bigint] NOT NULL,
+[AdditionalInfo] [xml] NULL,
+[Property] [ntext] COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Parameter] [ntext] COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[RunDate] [datetime] NOT NULL
+) ON [PRIMARY]
+GO

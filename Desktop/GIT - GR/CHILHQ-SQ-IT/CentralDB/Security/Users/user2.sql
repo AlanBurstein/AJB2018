@@ -1,0 +1,2 @@
+CREATE USER [user2] FOR LOGIN [login2]
+GO
