@@ -139,6 +139,22 @@ FROM
    ABS(SIGN(ng.position-1)-1) +    --<< are you the first row?  OR
    PATINDEX(@pattern,SUBSTRING(@string,ng.position-1,1)) --<< always 0 for 1st row
 ) f(position, token)
-CROSS APPLY (VALUES
- (ISNULL(NULLIF(PATINDEX('%'+@pattern+'%',f.token),0),DATALENGTH(@string))-1)) itemLen(l);
+CROSS APPLY (VALUES(ISNULL(NULLIF(PATINDEX('%'+@pattern+'%',f.token),0),
+  DATALENGTH(@string)+2-f.position)-1)) itemLen(l);
+
+-- OLD VERSION:
+;
+--select
+--  itemNumber = row_number() over (order by (position)),
+--  itemIndex  = position,
+--  item       = substring(token,1,isnull(nullif(patindex('%'+@pattern+'%', token),0),8000)-1)
+--from
+--(
+--  select ng.position, substring(@string, ng.position, 8000)
+--  from dbo.NGrams8k(@string, 1) ng
+--  where ng.token not like @pattern 
+--  and  (ng.position = 1 or substring(@string,checksum(ng.position-1),1) like @pattern)
+--  order by ng.position
+--) filteredUnigram(position, token)
+--UNION ALL SELECT 1, 0, @string WHERE nullif(@string,'') is null;
 GO

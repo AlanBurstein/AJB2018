@@ -1,0 +1,15 @@
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_NULLS ON
+GO
+CREATE FUNCTION [samd].[dldIs1_8K] (@string1 VARCHAR(8000), @string2 VARCHAR(8000))
+RETURNS TABLE WITH SCHEMABINDING AS RETURN
+SELECT DLD = MAX(1)
+FROM
+(
+  SELECT 1
+  FROM dbo.ngrams8k(@string1,2) ng
+  WHERE @string2= STUFF(@string1, CHECKSUM(ng.position), 2, REVERSE(ng.token))
+  HAVING COUNT(*) = 1
+) dld(d);
+GO
