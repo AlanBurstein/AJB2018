@@ -1,0 +1,2 @@
+CREATE USER [usrupld] WITHOUT LOGIN
+GO

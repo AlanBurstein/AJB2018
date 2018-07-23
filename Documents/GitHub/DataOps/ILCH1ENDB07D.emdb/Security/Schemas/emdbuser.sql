@@ -1,0 +1,5 @@
+CREATE SCHEMA [emdbuser]
+AUTHORIZATION [dbo]
+GO
+GRANT SELECT ON SCHEMA:: [emdbuser] TO [GRInsReport]
+GO

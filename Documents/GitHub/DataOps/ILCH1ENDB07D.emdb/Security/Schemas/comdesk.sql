@@ -1,0 +1,7 @@
+CREATE SCHEMA [comdesk]
+AUTHORIZATION [dbo]
+GO
+GRANT SELECT ON SCHEMA:: [comdesk] TO [GRCORP\Commitment Desk SQL SEC]
+GO
+GRANT VIEW DEFINITION ON SCHEMA:: [comdesk] TO [GRCORP\Commitment Desk SQL SEC]
+GO

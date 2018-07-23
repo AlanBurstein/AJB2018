@@ -1,0 +1,5 @@
+IF NOT EXISTS (SELECT * FROM master.dbo.syslogins WHERE loginname = N'GRCORP\SSRS_DataSource_Dev')
+CREATE LOGIN [GRCORP\SSRS_DataSource_Dev] FROM WINDOWS
+GO
+CREATE USER [GRCORP\SSRS_DataSource_Dev] FOR LOGIN [GRCORP\SSRS_DataSource_Dev] WITH DEFAULT_SCHEMA=[reports]
+GO

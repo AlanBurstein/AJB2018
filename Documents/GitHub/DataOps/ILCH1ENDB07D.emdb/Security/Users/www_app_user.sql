@@ -1,0 +1,2 @@
+CREATE USER [www_app_user] WITHOUT LOGIN
+GO

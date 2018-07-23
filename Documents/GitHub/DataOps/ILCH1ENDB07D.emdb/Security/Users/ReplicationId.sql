@@ -1,0 +1,2 @@
+CREATE USER [ReplicationId] WITHOUT LOGIN
+GO

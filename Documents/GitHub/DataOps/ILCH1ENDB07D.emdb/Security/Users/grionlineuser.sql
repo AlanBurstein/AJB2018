@@ -1,0 +1,2 @@
+CREATE USER [grionlineuser] WITHOUT LOGIN
+GO

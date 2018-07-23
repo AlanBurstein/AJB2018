@@ -1,0 +1,2 @@
+CREATE USER [sdkuser] WITHOUT LOGIN
+GO

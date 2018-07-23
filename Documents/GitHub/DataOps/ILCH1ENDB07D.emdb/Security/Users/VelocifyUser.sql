@@ -1,0 +1,2 @@
+CREATE USER [VelocifyUser] WITHOUT LOGIN
+GO

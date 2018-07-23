@@ -1,0 +1,199 @@
+CREATE TABLE [emdbuser].[LOANXDB_N_12]
+(
+[XrefId] [int] NOT NULL,
+[_NEWHUD_X980] [decimal] (23, 10) NULL CONSTRAINT [DF_NEWHUD_X980] DEFAULT ((0.0)),
+[_NEWHUD_X1658] [decimal] (23, 10) NULL CONSTRAINT [DF_NEWHUD_X1658] DEFAULT ((0.0)),
+[_NEWHUD_X1659] [decimal] (23, 10) NULL CONSTRAINT [DF_NEWHUD_X1659] DEFAULT ((0.0)),
+[_NEWHUD_X1635] [decimal] (23, 10) NULL CONSTRAINT [DF_NEWHUD_X1635] DEFAULT ((0.0)),
+[_NEWHUD_X1596] [decimal] (23, 10) NULL CONSTRAINT [DF_NEWHUD_X1596] DEFAULT ((0.0)),
+[_NEWHUD_X1588] [decimal] (23, 10) NULL CONSTRAINT [DF_NEWHUD_X1588] DEFAULT ((0.0)),
+[_FR0312] [decimal] (23, 10) NULL CONSTRAINT [DF_FR0312] DEFAULT ((0.0)),
+[_2818] [decimal] (23, 10) NULL CONSTRAINT [DF_2818] DEFAULT ((0.0)),
+[_1540] [decimal] (23, 10) NULL CONSTRAINT [DF_1540] DEFAULT ((0.0)),
+[_MAX23K_X29] [decimal] (23, 10) NULL CONSTRAINT [DF_MAX23K_X29] DEFAULT ((0.0)),
+[_920] [decimal] (23, 10) NULL CONSTRAINT [DF_920] DEFAULT ((0.0)),
+[_FM0317] [decimal] (23, 10) NULL CONSTRAINT [DF_FM0317] DEFAULT ((0.0)),
+[_FM0217] [decimal] (23, 10) NULL CONSTRAINT [DF_FM0217] DEFAULT ((0.0)),
+[_152] [decimal] (23, 10) NULL CONSTRAINT [DF_152] DEFAULT ((0.0)),
+[_979] [decimal] (23, 10) NULL CONSTRAINT [DF_979] DEFAULT ((0.0)),
+[_146] [decimal] (23, 10) NULL CONSTRAINT [DF_146] DEFAULT ((0.0)),
+[_FM0117] [decimal] (23, 10) NULL CONSTRAINT [DF_FM0117] DEFAULT ((0.0)),
+[_NEWHUD_X1191] [decimal] (23, 10) NULL CONSTRAINT [DF_NEWHUD_X1191] DEFAULT ((0.0)),
+[_FM0417] [decimal] (23, 10) NULL CONSTRAINT [DF_FM0417] DEFAULT ((0.0)),
+[_149] [decimal] (23, 10) NULL CONSTRAINT [DF_149] DEFAULT ((0.0)),
+[_975] [decimal] (23, 10) NULL CONSTRAINT [DF_975] DEFAULT ((0.0)),
+[_CX_PARTXCHANGE_ID] [decimal] (23, 10) NULL CONSTRAINT [DF_CX_PARTXCHANGE_ID] DEFAULT ((0.0)),
+[_BE0413] [decimal] (23, 10) NULL CONSTRAINT [DF_BE0413] DEFAULT ((0.0)),
+[_CX_FINAL_VALUE_1] [decimal] (23, 10) NULL CONSTRAINT [DF_CX_FINAL_VALUE_1] DEFAULT ((0.0)),
+[_BE0313] [decimal] (23, 10) NULL CONSTRAINT [DF_BE0313] DEFAULT ((0.0)),
+[_BE0213] [decimal] (23, 10) NULL CONSTRAINT [DF_BE0213] DEFAULT ((0.0)),
+[_137] [decimal] (23, 10) NULL CONSTRAINT [DF_137] DEFAULT ((0.0)),
+[_2005] [decimal] (23, 10) NULL CONSTRAINT [DF_2005] DEFAULT ((0.0)),
+[_2223] [decimal] (23, 10) NULL CONSTRAINT [DF_2223] DEFAULT ((0.0)),
+[_CX_TOTAL_LENDER_CREDIT] [decimal] (23, 10) NULL CONSTRAINT [DF_CX_TOTAL_LENDER_CREDIT] DEFAULT ((0.0)),
+[_923] [decimal] (23, 10) NULL CONSTRAINT [DF_923] DEFAULT ((0.0)),
+[_1771] [decimal] (23, 10) NULL CONSTRAINT [DF_1771] DEFAULT ((0.0)),
+[_CX_DOCCNDOFLOORS] [decimal] (23, 10) NULL CONSTRAINT [DF_CX_DOCCNDOFLOORS] DEFAULT ((0.0)),
+[_924] [decimal] (23, 10) NULL CONSTRAINT [DF_924] DEFAULT ((0.0)),
+[_919] [decimal] (23, 10) NULL CONSTRAINT [DF_919] DEFAULT ((0.0)),
+[_1014] [decimal] (23, 10) NULL CONSTRAINT [DF_1014] DEFAULT ((0.0)),
+[_922] [decimal] (23, 10) NULL CONSTRAINT [DF_922] DEFAULT ((0.0)),
+[_FR0212] [decimal] (23, 10) NULL CONSTRAINT [DF_FR0212] DEFAULT ((0.0)),
+[_CX_CBC_INVOICE] [decimal] (23, 10) NULL CONSTRAINT [DF_CX_CBC_INVOICE] DEFAULT ((0.0)),
+[_921] [decimal] (23, 10) NULL CONSTRAINT [DF_921] DEFAULT ((0.0)),
+[_FR0224] [decimal] (23, 10) NULL CONSTRAINT [DF_FR0224] DEFAULT ((0.0)),
+[_903] [decimal] (23, 10) NULL CONSTRAINT [DF_903] DEFAULT ((0.0)),
+[_116] [decimal] (23, 10) NULL CONSTRAINT [DF_116] DEFAULT ((0.0)),
+[_111] [decimal] (23, 10) NULL CONSTRAINT [DF_111] DEFAULT ((0.0)),
+[_904] [decimal] (23, 10) NULL CONSTRAINT [DF_904] DEFAULT ((0.0)),
+[_907] [decimal] (23, 10) NULL CONSTRAINT [DF_907] DEFAULT ((0.0)),
+[_FR0412] [decimal] (23, 10) NULL CONSTRAINT [DF_FR0412] DEFAULT ((0.0)),
+[_902] [decimal] (23, 10) NULL CONSTRAINT [DF_902] DEFAULT ((0.0)),
+[_FR0424] [decimal] (23, 10) NULL CONSTRAINT [DF_FR0424] DEFAULT ((0.0)),
+[_1539] [decimal] (23, 10) NULL CONSTRAINT [DF_1539] DEFAULT ((0.0)),
+[_906] [decimal] (23, 10) NULL CONSTRAINT [DF_906] DEFAULT ((0.0)),
+[_901] [decimal] (23, 10) NULL CONSTRAINT [DF_901] DEFAULT ((0.0)),
+[_117] [decimal] (23, 10) NULL CONSTRAINT [DF_117] DEFAULT ((0.0)),
+[_1005] [decimal] (23, 10) NULL CONSTRAINT [DF_1005] DEFAULT ((0.0)),
+[_905] [decimal] (23, 10) NULL CONSTRAINT [DF_905] DEFAULT ((0.0)),
+[_CX_MRTG_COUNT] [decimal] (23, 10) NULL CONSTRAINT [DF_CX_MRTG_COUNT] DEFAULT ((0.0)),
+[_FL0513] [decimal] (23, 10) NULL CONSTRAINT [DF_FL0513] DEFAULT ((0.0)),
+[_FL0413] [decimal] (23, 10) NULL CONSTRAINT [DF_FL0413] DEFAULT ((0.0)),
+[_FL0313] [decimal] (23, 10) NULL CONSTRAINT [DF_FL0313] DEFAULT ((0.0)),
+[_FL0713] [decimal] (23, 10) NULL CONSTRAINT [DF_FL0713] DEFAULT ((0.0)),
+[_FL0213] [decimal] (23, 10) NULL CONSTRAINT [DF_FL0213] DEFAULT ((0.0)),
+[_FL0113] [decimal] (23, 10) NULL CONSTRAINT [DF_FL0113] DEFAULT ((0.0)),
+[_FL0613] [decimal] (23, 10) NULL CONSTRAINT [DF_FL0613] DEFAULT ((0.0)),
+[_1335] [decimal] (23, 10) NULL CONSTRAINT [DF_1335] DEFAULT ((0.0)),
+[_234] [decimal] (23, 10) NULL CONSTRAINT [DF_234] DEFAULT ((0.0)),
+[_224] [decimal] (23, 10) NULL CONSTRAINT [DF_224] DEFAULT ((0.0)),
+[_1074] [decimal] (23, 10) NULL CONSTRAINT [DF_1074] DEFAULT ((0.0)),
+[_215] [decimal] (23, 10) NULL CONSTRAINT [DF_215] DEFAULT ((0.0)),
+[_967] [decimal] (23, 10) NULL CONSTRAINT [DF_967] DEFAULT ((0.0)),
+[_1844] [decimal] (23, 10) NULL CONSTRAINT [DF_1844] DEFAULT ((0.0)),
+[_210] [decimal] (23, 10) NULL CONSTRAINT [DF_210] DEFAULT ((0.0)),
+[_1607] [decimal] (23, 10) NULL CONSTRAINT [DF_1607] DEFAULT ((0.0)),
+[_1605] [decimal] (23, 10) NULL CONSTRAINT [DF_1605] DEFAULT ((0.0)),
+[_1609] [decimal] (23, 10) NULL CONSTRAINT [DF_1609] DEFAULT ((0.0)),
+[_140] [decimal] (23, 10) NULL CONSTRAINT [DF_140] DEFAULT ((0.0)),
+[_303] [decimal] (23, 10) NULL CONSTRAINT [DF_303] DEFAULT ((0.0)),
+[_120] [decimal] (23, 10) NULL CONSTRAINT [DF_120] DEFAULT ((0.0)),
+[_229] [decimal] (23, 10) NULL CONSTRAINT [DF_229] DEFAULT ((0.0)),
+[_126] [decimal] (23, 10) NULL CONSTRAINT [DF_126] DEFAULT ((0.0)),
+[_1092] [decimal] (23, 10) NULL CONSTRAINT [DF_1092] DEFAULT ((0.0)),
+[_1718] [decimal] (23, 10) NULL CONSTRAINT [DF_1718] DEFAULT ((0.0)),
+[_121] [decimal] (23, 10) NULL CONSTRAINT [DF_121] DEFAULT ((0.0)),
+[_256] [decimal] (23, 10) NULL CONSTRAINT [DF_256] DEFAULT ((0.0)),
+[_217] [decimal] (23, 10) NULL CONSTRAINT [DF_217] DEFAULT ((0.0)),
+[_1055] [decimal] (23, 10) NULL CONSTRAINT [DF_1055] DEFAULT ((0.0)),
+[_1053] [decimal] (23, 10) NULL CONSTRAINT [DF_1053] DEFAULT ((0.0)),
+[_272] [decimal] (23, 10) NULL CONSTRAINT [DF_272] DEFAULT ((0.0)),
+[_222] [decimal] (23, 10) NULL CONSTRAINT [DF_222] DEFAULT ((0.0)),
+[_212] [decimal] (23, 10) NULL CONSTRAINT [DF_212] DEFAULT ((0.0)),
+[_213] [decimal] (23, 10) NULL CONSTRAINT [DF_213] DEFAULT ((0.0)),
+[_HUD38] [decimal] (23, 10) NULL CONSTRAINT [DF_HUD38] DEFAULT ((0.0)),
+[_HUD33] [decimal] (23, 10) NULL CONSTRAINT [DF_HUD33] DEFAULT ((0.0)),
+[_105_P2] [decimal] (23, 10) NULL CONSTRAINT [DF_105_P2] DEFAULT ((0.0)),
+[_119_P2] [decimal] (23, 10) NULL CONSTRAINT [DF_119_P2] DEFAULT ((0.0)),
+[_HUD30] [decimal] (23, 10) NULL CONSTRAINT [DF_HUD30] DEFAULT ((0.0)),
+[_HUD31] [decimal] (23, 10) NULL CONSTRAINT [DF_HUD31] DEFAULT ((0.0)),
+[_2617] [decimal] (23, 10) NULL,
+[_2616] [decimal] (23, 10) NULL,
+[_2614] [decimal] (23, 10) NULL,
+[_CX_NUMGRLOANSINPROGRESS] [decimal] (23, 10) NULL
+) ON [PRIMARY]
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_NULLS ON
+GO
+
+CREATE TRIGGER [emdbuser].[ti_LOANXDB_N_12_Forklift_LoanSummary]
+   ON  [emdbuser].[LOANXDB_N_12]
+   AFTER INSERT
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	IF NOT EXISTS( SELECT 1 FROM emdbuser.LoanSummary ls JOIN inserted i ON i.XRefID = ls.XRefID)
+	BEGIN
+
+		INSERT INTO emdbuser.LoanSummary([Guid]
+										,[LoanNumber]
+										,[LoanFolder] 
+										,[LoanName]
+										,[Status]
+										,[loanStatus]
+										,[RateLockStatus]
+										,[RateIsLocked]
+										,[Investor]
+										,[Broker]
+										,XRefID
+										,LastModified
+										,DownPayment)
+		SELECT NEWID()
+			  ,''
+			  ,''
+			  ,NEWID()
+			  ,'A'
+			  ,''
+			  ,''
+			  ,''
+			  ,''
+			  ,''
+			  ,XRefID
+			  ,GETDATE()
+			  ,_1335
+		FROM inserted i
+
+	END
+	ELSE
+
+		UPDATE ls
+		SET  DownPayment = i._1335
+			,LastModified = GETDATE()
+		FROM emdbuser.LoanSummary ls
+		JOIN inserted i ON i.XRefID = ls.XRefID
+
+	
+
+
+
+END
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_NULLS ON
+GO
+
+CREATE TRIGGER [emdbuser].[tu_LOANXDB_N_12_Forklift_LoanSummary]
+   ON  [emdbuser].[LOANXDB_N_12]
+   AFTER UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	IF (UPDATE(_1335))
+
+		UPDATE ls
+		SET  DownPayment = i._1335
+			,LastModified = GETDATE()
+		FROM emdbuser.LoanSummary ls
+		JOIN inserted i ON i.XRefID = ls.XRefID
+
+	
+
+
+
+END
+GO
+ALTER TABLE [emdbuser].[LOANXDB_N_12] ADD CONSTRAINT [PK_LOANXDB_N_12_XrefId] PRIMARY KEY CLUSTERED  ([XrefId]) WITH (FILLFACTOR=80) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IDX_GRI_LOANXDB_N_12_LoanService_09] ON [emdbuser].[LOANXDB_N_12] ([XrefId]) INCLUDE ([_CX_PARTXCHANGE_ID]) WITH (FILLFACTOR=100, PAD_INDEX=ON) ON [PRIMARY]
+GO

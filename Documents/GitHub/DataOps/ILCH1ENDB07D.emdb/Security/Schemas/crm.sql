@@ -1,0 +1,5 @@
+CREATE SCHEMA [crm]
+AUTHORIZATION [dbo]
+GO
+GRANT SELECT ON SCHEMA:: [crm] TO [crmuser]
+GO

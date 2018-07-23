@@ -1,0 +1,2 @@
+CREATE USER [unisurrptusr] WITHOUT LOGIN WITH DEFAULT_SCHEMA=[emdbuser]
+GO

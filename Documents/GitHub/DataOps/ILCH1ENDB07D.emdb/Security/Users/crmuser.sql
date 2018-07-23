@@ -1,0 +1,2 @@
+CREATE USER [crmuser] WITHOUT LOGIN
+GO
