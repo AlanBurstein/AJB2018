@@ -1,0 +1,9 @@
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_NULLS ON
+GO
+CREATE FUNCTION [dbo].[itvf_Levenshtein](@a VARCHAR(8000), @b VARCHAR(8000), @minScoreHint FLOAT=0)
+RETURNS TABLE WITH SCHEMABINDING AS RETURN
+		SELECT ld = ROUND((1.0 - clr.Similarity(@a, @b, 0, 0, @minScoreHint)) * v.scalar, 0)
+  FROM (VALUES (CONVERT(REAL, CASE WHEN LEN(@a)>LEN(@b) THEN LEN(@a) ELSE LEN(@b) END))) v(scalar);
+GO

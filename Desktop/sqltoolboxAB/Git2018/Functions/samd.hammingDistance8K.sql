@@ -2,7 +2,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
-
 CREATE FUNCTION [samd].[hammingDistance8K] (@s1 VARCHAR(8000), @s2 VARCHAR(8000))
 /*****************************************************************************************
 Purpose:
@@ -71,8 +70,8 @@ RETURNS TABLE WITH SCHEMABINDING AS RETURN
 SELECT hammingDistance.hd
 FROM
 (
-  SELECT CASE DATALENGTH(@s1) WHEN DATALENGTH(@s2)
-         THEN DATALENGTH(@s1)-SUM(CHARINDEX(ng.token, SUBSTRING(@s2, ng.position, 1))) END
+  SELECT CASE LEN(@s1) WHEN LEN(@s2)
+         THEN LEN(@s1)-SUM(CHARINDEX(ng.token,SUBSTRING(@s2,ng.position,1))) END
   FROM dbo.NGrams8k(@s1,1) ng
 ) hammingDistance(hd);
 /*
