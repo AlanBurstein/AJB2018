@@ -2,33 +2,44 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
-CREATE FUNCTION [samd].[hammingDistance8K] (@s1 VARCHAR(8000), @s2 VARCHAR(8000))
+CREATE FUNCTION [samd].[hammingDistance8K] 
+(
+  @s1 VARCHAR(8000), -- first input string
+  @s2 VARCHAR(8000)  -- second input string
+)
 /*****************************************************************************************
-Purpose:
- <breif details about what the routine does,,>
+[Purpose]:
+ Purely set-based iTVF that returns the Hamming Distance between two strings of equal 
+ length. See: https://en.wikipedia.org/wiki/Hamming_distance
 
-Compatibility: 
- <SQL Server Version,,SQL Server 2008+>
- <optional details about why it won't work with earlier versions,,>
+[Author]:
+ Alan Burstein
 
-Syntax:
+[Compatibility]:
+ SQL Server 2008+
+
+[Syntax]:
 --===== Autonomous
- SELECT f.returnValue
- FROM dbo.yourfunction(@parameters) f;
+ SELECT h.HD
+ FROM   samd.hammingDistance8K(@s1,@s2) AS h;
 
 --===== Against a table using APPLY
- SELECT f.returnValue
- FROM dbo.someTable t
- CROSS APPLY dbo.yourfunction(t.col, @parameters) f;
+ SELECT      t.string, S2 = @s2, h.HD
+ FROM        dbo.someTable AS t
+ CROSS APPLY samd.hammingDistance8K(t.string, @s2) AS h;
 
-Parameters:
-  @string = <datatype,,>; <parameter details,,>
+[Parameters]:
+  @s1 = VARCHAR(8000); the first input string
+  @s2 = VARCHAR(8000); the second input string
 
-Returns:
+[Returns]:
  <function type,,inline table valued function> returns:
  <name> = <datatype> <description>
 
-Developer Notes:
+[Dependencies]:
+ 1. samd.NGrams8K
+
+[Developer Notes]:
  1. Requires <required objects,,dbo.>
  2. Returns <return value on NULL input,,a single NULL>, 
     <return value on blank input,,No rows>. To return a single row containing a a NULL or 
@@ -48,34 +59,42 @@ Developer Notes:
     performance testing using Traceflag 8649 in Development environments and 
     Adam Machanic's make_parallel in Production. 
 
+[Examples]:
+--===== 1. Basic Use
+DECLARE @s1 VARCHAR(8000) = 'abc1234',  
+        @s2 VARCHAR(8000) = 'abc2234'; 
 
-Usage Examples:
-
---===== 1. <tile 1.,,>
- -- (1.1) <subtitle 1.1,,>
- <example code 1.1.,,s>;
-
- -- (1.2) <subtitle 1.2.,,>
- <example code 12..,,s>;
-
---===== 1. <tile 2.,,>
- -- (1.1) <subtitle,,>
- <example code 1,,s>;
+SELECT h.hd 
+FROM   samd.hammingDistance8K(@s1,@s2) AS h;
 
 ---------------------------------------------------------------------------------------
 Revision History: 
- Rev 00 - <YYYYMMDD> - <details> - <developer>
+ Rev 00 - 20180800 - Initial re-design - Alan Burstein
 *****************************************************************************************/
 RETURNS TABLE WITH SCHEMABINDING AS RETURN
-SELECT hammingDistance.hd
+SELECT hammingDistance.HD
 FROM
 (
-  SELECT CASE LEN(@s1) WHEN LEN(@s2)
-         THEN LEN(@s1)-SUM(CHARINDEX(ng.token,SUBSTRING(@s2,ng.position,1))) END
-  FROM dbo.NGrams8k(@s1,1) ng
-) hammingDistance(hd);
+  SELECT CASE LEN(@S1) 
+         WHEN LEN(@S2) THEN LEN(@S1)-SUM(CHARINDEX(ng.token,SUBSTRING(@S2,ng.position,1)))
+         END
+  FROM   dbo.NGrams8k(@s1,1) AS ng
+) AS hammingDistance(HD);
 /*
-  dld = CASE WHEN hammingDistance.hd < 2 THEN hammingDistance.hd END,
-  lcs = CASE WHEN hammingDistance.hd < 2 THEN DATALENGTH(@s1)-hammingDistance.hd END
+dld = CASE WHEN hammingDistance.hd < 2 THEN hammingDistance.hd END,
+lcs = CASE WHEN hammingDistance.hd < 2 THEN DATALENGTH(@s1)-hammingDistance.hd END
+
+DECLARE -- THE UNIGRAM PROBLEM: Two solutions: (1) for short strings, use the other function (2) wrap results in subquery UNION ALL'd with 
+  @s1 VARCHAR(8000) = 'abc1234',  
+  @s2 VARCHAR(8000) = 'abc2234'; 
+
+SELECT h.hd FROM samd.hammingDistance8K(@s1,@s2) AS h OPTION(RECOMPILE);
+
+SELECT hd = CASE LEN(@S2)-LEN(@S2) WHEN 0 THEN LEN(@S1)-SUM(CHARINDEX(c.S1,c.S2)) END
+FROM samd.bernie8K(@s1,@s2)                         AS b
+CROSS APPLY dbo.NGrams8k(b.S1,1)                    AS ng
+CROSS APPLY (VALUES(SUBSTRING(b.S1,ng.position,1),
+                    SUBSTRING(b.S2,ng.position,1))) AS c(S1,S2)
+OPTION(RECOMPILE);
 */;
 GO
