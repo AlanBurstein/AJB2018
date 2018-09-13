@@ -8,15 +8,30 @@ CREATE FUNCTION [samd].[delimitedSplitAB8K_VLO]
   @delimiter    VARCHAR(100)
 )
 RETURNS TABLE WITH SCHEMABINDING AS RETURN
-/*
+/*****************************************************************************************
+[Purpose]:
+
+[Author]: 
+  Alan Burstein
+
+[Compatibility]:
+ SQL Server 2008+, Azure SQL Database
+
+[Syntax]:
+--===== Autonomous
 DECLARE 
   @string    VARCHAR(8000) = 'blah blah...<br/>more yada yada...<br/>The end!',
   @delimiter VARCHAR(100)  = '<br/>'
 
-SELECT * FROM samd.delimitedSplitAB8K_VLO(@string, @delimiter) split
+SELECT split.* 
+FROM samd.delimitedSplitAB8K_VLO(@string, @delimiter) AS split;
 
-Created: 20180725
-*/
+--===== Against a table using APPLY
+
+[Revision History]:
+------------------------------------------------------------------------------------------
+ Rev 00 - 20180725 - Initial Development - Alan Burstein
+****************************************************************************************/
 SELECT
   itemNumber = ROW_NUMBER() OVER (ORDER BY d.p),
   itemIndex  = ISNULL(NULLIF(d.p+l.d,0),1),
@@ -31,6 +46,5 @@ CROSS APPLY  -- string and delimiter length ^^^
   WHERE token = @delimiter
 ) as d(p) -- delimiter.position
 CROSS APPLY (VALUES(
-  ISNULL(NULLIF(CHARINDEX(@delimiter,@string,d.p+l.d),0)-(d.p+l.d),l.s+l.d))) item(ln)
-
+  ISNULL(NULLIF(CHARINDEX(@delimiter,@string,d.p+l.d),0)-(d.p+l.d),l.s+l.d))) AS item(ln);
 GO

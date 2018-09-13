@@ -4,7 +4,7 @@ SET ANSI_NULLS ON
 GO
 create function [dbo].[edgeNgrams8k](@string varchar(8000))
 /*****************************************************************************************
-Purpose
+[Purpose]:
   edgeNgrams8k is an inline table valued function (itvf) that accepts a varchar(8000) 
   input string (@string) and returns a series of character-level left and right edge 
   n-grams. An edge n-gram (referred to herin as an "edge-gram" for brevity) is a type of 
@@ -25,7 +25,7 @@ Purpose
   2          AB           2                BC
   3          ABC          1                ABC
 
-Developer Notes:
+[Developer Notes]:
  1. For more about N-Grams in SQL Server see: https://goo.gl/QrLMtw
     For more about Edge N-Grams see the documentation by Elastic here: https://goo.gl/YX4G51
 
@@ -36,34 +36,29 @@ Developer Notes:
     sort by tokenLen for ascending order, or by rightTokenIndex for descending order.
 
 ------------------------------------------------------------------------------------------
-Usage Examples:
+[Examples]:
   I need to turn /A/B/C/D/E into:
   /A
   /A/B
   .....
   /A/B/C/D/E
 
-  select leftToken 
-	from dbo.edgeNgrams8k('/A/B/C/D/E')
-  where tokenLen % 2 = 0;
+ SELECT * --e.itemLength, prefix
+ FROM   dbo.edgeNgrams8k('/A/B/C/D/E/F/G') AS e
+ WHERE  e.itemLength % 2 = 0;
 
 ------------------------------------------------------------------------------------------
-History:
- 20171125 - Initial Development - Developed by Alan Burstein  
+[Revision History]:
+ 20171125 - Initial Development - Developed by Alan Burstein
+ 20180912 - Re-designed using rangeAB. Added new columns... - Alan Burstein
 *****************************************************************************************/
-returns table with schemabinding as return
-with iTally(n) as 
-(
-  select top (len(@string)) row_number() over (order by (select $))
-  from (values (1),(1),(1),(1),(1),(1),(1),(1),(1),(1)) a(x), -- 10^1 = 10
-       (values (1),(1),(1),(1),(1),(1),(1),(1),(1),(1)) b(x), -- 10^2 = 100
-       (values (1),(1),(1),(1),(1),(1),(1),(1),(1),(1)) c(x), -- 10^3 = 1000
-       (values (1),(1),(1),(1),(1),(1),(1),(1),(1),(1)) d(x)  -- 10^4 = 10000
-)
-select top (convert(bigint, len(@string), 0))
-  tokenlen        = n,
-  leftToken       = substring(@string,1,n),
-  rightTokenIndex = len(@string)+1-n,
-  righttoken      = substring(@string,len(@string)+1-n, n)
-from itally;
+RETURNS TABLE WITH SCHEMABINDING AS RETURN
+SELECT
+  itemLength  = r.RN,
+  prefix      = SUBSTRING(@string, 1,    r.RN),
+  prefixOP    = SUBSTRING(@string, 1,    r.OP),
+  suffix      = SUBSTRING(@string, r.OP, r.RN),
+  suffixOP    = SUBSTRING(@string, r.RN, r.OP),
+  suffixIndex = r.OP
+FROM dbo.rangeAB(1,DATALENGTH(@string),1,1) AS r;
 GO
