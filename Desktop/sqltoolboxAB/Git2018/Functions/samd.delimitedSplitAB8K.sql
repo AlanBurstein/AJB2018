@@ -9,61 +9,65 @@ CREATE FUNCTION [samd].[delimitedSplitAB8K]
 )
 RETURNS TABLE WITH SCHEMABINDING AS RETURN
 /*****************************************************************************************
-Purpose:
+[Purpose]:
  Splits (tokenizes) an input string (@string) into rows based on a user-supplied delimiter
  (@delimiter). The functionality is identical to Jeff Moden's DelimitedSplit8K but with 
  added functionality: It returns the item's position in the string as well as it's length.
 
-Compatibility: 
- SQL Server 2008+
- <optional details about why it won't work with earlier versions,,>
+[Author]:
+ Alan Burstein 
+ (Based on Jeff Moden's DelimitedSplit8K)
 
-Syntax:
+[Compatibility]:
+ SQL Server 2008+
+
+[Syntax]:
 --===== Autonomous
  SELECT ds.itemNumber, ds.itemIndex, ds.itemLength, ds.item
- FROM samd.delimitedSplitAB8K(@string, @delimiter) ds;
+ FROM   samd.delimitedSplitAB8K(@string, @delimiter) AS ds;
 
 --===== Against a table using APPLY
  SELECT t.someId, ds.itemNumber, ds.itemIndex, ds.itemLength, ds.item
- FROM dbo.someTable t
- CROSS APPLY samd.delimitedSplitAB8K(t.someString, @delimiter) ds;
+ FROM        dbo.someTable AS t
+ CROSS APPLY samd.delimitedSplitAB8K(t.someString, @delimiter) AS ds;
 
-Parameters:
-  @string    = varchar(8000); input string to split
-  @delimiter = char(1); item delimiter
+[Parameters]:
+  @string    = VARCHAR(8000); input string to split
+  @delimiter = CHAR(1); item delimiter
 
-Returns:
+[Returns]:
  Inline table valued function returns:
- itemNumber = bigint; ordinal position of the item in the string
- itemIndex  = int; position (charindex) of the item in the string
- itemLength = int; length of the item
- item       = varchar(8000); the item (token)
+  itemNumber = BIGINT; ordinal position of the item in the string
+  itemIndex  = INT; position (charindex) of the item in the string
+  itemLength = INT; length of the item
+  item       = VARCHAR(8000); the item (token)
 
-Developer Notes:
- 1. Requires NGrams8K which is available here: https://goo.gl/ZHzVcw
- 2. Returns a NULL item on NULL @string input 
- 3. delimitedSplitAB8K is not case sensitive
- 4. delimitedSplitAB8K is deterministic. For more deterministic functions see:
+[Dependencies]:
+ Requires dbo.NGrams8K which is available here: https://goo.gl/ZHzVcw
+
+[Developer Notes]:
+ 1. Returns a NULL item on NULL @string input 
+ 2. delimitedSplitAB8K is not case sensitive
+ 3. delimitedSplitAB8K is deterministic. For more deterministic functions see:
     https://msdn.microsoft.com/en-us/library/ms178091.aspx
 
-Usage Examples:
-
+[Examples]:
 --===== 1. Against a variable
  DECLARE @string varchar(8000) = ',,abc,12345,z,,,', @delimiter char(1) = ',';
 
  SELECT ds.itemNumber, ds.itemIndex, ds.itemLength, ds.item
- FROM samd.delimitedSplitAB8K(@string, @delimiter) ds;
+ FROM   samd.delimitedSplitAB8K(@string, @delimiter) AS ds;
 
 --===== 2. Against a table
  DECLARE @table TABLE (someId INT IDENTITY, someString VARCHAR(8000));
- INSERT @table(someString) VALUES ('abc,123'), ('xxx,yyy'), ('1,2,3');
+ INSERT  @table(someString) VALUES ('abc,123'), ('xxx,yyy'), ('1,2,3');
 
- SELECT t.someId, ds.itemNumber, ds.itemIndex, ds.itemLength, ds.item
- FROM @table t
- CROSS APPLY samd.delimitedSplitAB8K(t.someString, ',') ds;
+ SELECT      t.someId, ds.itemNumber, ds.itemIndex, ds.itemLength, ds.item
+ FROM        @table AS t
+ CROSS APPLY samd.delimitedSplitAB8K(t.someString, ',') AS ds;
 
----------------------------------------------------------------------------------------
-Revision History: 
+-----------------------------------------------------------------------------------------
+[Revision History]: 
  Rev 00 - 20180704 - Created - Alan Burstein
 *****************************************************************************************/
 SELECT

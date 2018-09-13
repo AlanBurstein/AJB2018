@@ -2,11 +2,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
-CREATE FUNCTION [samd].[dldIs1] (@string1 VARCHAR(8000), @string2 VARCHAR(8000))
+CREATE FUNCTION [samd].[dldIs1] (@s1 VARCHAR(8000), @s2 VARCHAR(8000))
 RETURNS TABLE WITH SCHEMABINDING AS RETURN
 SELECT DLD = 1
 WHERE EXISTS(
   SELECT 1
-  FROM dbo.ngrams8k(@string1,2) ng
-  WHERE @string2 = STUFF(@string1, CHECKSUM(ng.position), 2,REVERSE(ng.token)));
+  FROM dbo.ngrams8k(@s1,2) AS ng
+  WHERE @s2 = STUFF(@s1, CHECKSUM(ng.position), 2,REVERSE(ng.token)));
 GO

@@ -2,21 +2,53 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
-CREATE FUNCTION [dbo].[make_parallel]() 
+CREATE FUNCTION [dbo].[make_parallel]()
 /****************************************************************************************
-Author: Adam Machanic (https://goo.gl/MEcxSh)
+[Author]: Adam Machanic (https://goo.gl/MEcxSh)
 
-Purpose:
+[Purpose]:
  This function forces a parallel query plan. Use only when you know a parallel
  plan is the best option. 
 
-Notes:
- This is a slightly updated version; updated on 20170811 by Alan Burstein for schemabinding
+[Compatibility]:
+ SQL Server 2008+, Azure SQL Database (uses the VALUES table constructer)
 
-Usage:
- SELECT t.*
- FROM dbo.table t
- CROSS APPLY dbo.make_parallel();
+[Syntax]:
+--===== Autonomous
+ N/A
+
+--===== Force a parallel execution plan using a CROSS JOIN
+ SELECT s.*
+ FROM dbo.something AS s; -- table or function
+ CROSS JOIN dbo.make_parallel() AS mp;
+
+[Parameters]:
+ N/A
+
+[Returns]:
+x = Dummy NULL value
+
+[Developer Notes]:
+ 1. This is a slightly updated version of Adam Machanic's make_parallel: 
+   (https://goo.gl/MEcxSh); updated on 20170811 by Alan Burstein to include
+   WITH SCHEMABINDING.
+
+[Examples]:
+--===== 1. Force a parallel execution plan 
+ DECLARE @table TABLE (someid int identity primary key, col1 VARCHAR(1000) NULL);
+ INSERT  @table(col1) 
+ SELECT TOP (100) newid() 
+ FROM        sys.all_columns;
+
+ SELECT      t.col1, d.digitsOnly 
+ FROM        @table                    AS t
+ CROSS APPLY samd.digitsOnlyEE(t.col1) AS d
+ CROSS APPLY dbo.make_parallel()       AS mp;
+
+[Revision History]:
+------------------------------------------------------------------------------------------
+ Rev 00 - 20130711 - Published SQLBlog.com (now http://dataeducation.com) - Adam Machanic
+ Rev 01 - 20170811 - Added Schemabinding -  Alan Burstein
 ****************************************************************************************/
 RETURNS TABLE WITH SCHEMABINDING AS  RETURN 
 WITH 

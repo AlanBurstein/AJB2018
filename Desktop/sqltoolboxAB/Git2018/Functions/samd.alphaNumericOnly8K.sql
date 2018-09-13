@@ -5,20 +5,20 @@ GO
 CREATE FUNCTION [samd].[alphaNumericOnly8K](@pString varchar(8000)) 
 RETURNS TABLE WITH SCHEMABINDING AS RETURN
 /****************************************************************************************
-Purpose:
+PURPOSE::
  Given a varchar(8000) string or smaller, this function strips all but the alphanumeric 
  characters that exist in @pString.
-
-Compatibility: 
+;;
+COMPATIBILITY::
  SQL Server 2008+, Azure SQL Database, Azure SQL Data Warehouse & Parallel Data Warehouse
-
-Parameters:
+;;
+PARAMETERS::
  @pString = varchar(8000); Input string to be cleaned
-
-Returns:
+;;
+RETURNS::
  AlphaNumericOnly - varchar(8000) 
-
-Syntax:
+;;
+SYNTAX::
 --===== Autonomous
  SELECT ca.AlphaNumericOnly
  FROM dbo.AlphaNumericOnly(@pString) ca;
@@ -27,8 +27,8 @@ Syntax:
  SELECT ca.AlphaNumericOnly
  FROM dbo.SomeTable st
  CROSS APPLY dbo.AlphaNumericOnly(st.SomeVarcharCol) ca;
-
-Programmer's Notes:
+;;
+DEVELOPER_NOTES::
  1. Based on Jeff Moden/Eirikur Eiriksson's DigitsOnlyEE function. For more details see:
     http://www.sqlservercentral.com/Forums/Topic1585850-391-2.aspx#bm1629360
 
@@ -64,8 +64,8 @@ Programmer's Notes:
 
  8. AlphaNumericOnly is deterministic; for more about deterministic and nondeterministic
     functions see https://msdn.microsoft.com/en-us/library/ms178091.aspx
-    
-Usage Examples:
+
+EXAMPLES::
 --===== 1. Basic use against a literal
 
  SELECT ao.AlphaNumericOnly 
@@ -78,7 +78,7 @@ Usage Examples:
  SELECT txtID, OldTxt = txt, AlphaNumericOnly
  FROM @sampleTxt st
  CROSS APPLY samd.alphaNumericOnly8K(st.txt);
-
+REVISION_HISTORY::
 ---------------------------------------------------------------------------------------
 Revision History:
  Rev 00 - 20150526 - Inital Creation - Alan Burstein
@@ -86,6 +86,7 @@ Revision History:
                    - Eirikur Eiriksson
  Rev 01 - 20180624 - ADDED ORDER BY N; now performing CHECKSUM conversion to INT inside
                      the final cte (digitsonly) so that ORDER BY N does not get sorted.
+;;
 ****************************************************************************************/ 
 WITH 
 E1(N) AS 

@@ -2,14 +2,18 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
-CREATE FUNCTION [samd].[ldIs1] (@string1 VARCHAR(8000), @string2 VARCHAR(8000))
+CREATE FUNCTION [samd].[ldIs1] (@s1 VARCHAR(8000), @s2 VARCHAR(8000))
 RETURNS TABLE WITH SCHEMABINDING AS RETURN
-SELECT LD = 1
-WHERE EXISTS (
-  SELECT 1
-  FROM (VALUES(IIF(LEN(@string1)>LEN(@string2),1,2))) longer(s)
-  CROSS APPLY (VALUES(IIF(longer.s=1,@string1,@string2),
-                      IIF(longer.s=1,@string2,@string1))) s(s1,s2)
-  CROSS APPLY dbo.ngrams8K(s.s1,1) ng
-  WHERE s.s2 = STUFF(s.s1,ng.position,1,''));
+SELECT TOP (1) 
+  S1       = b.S1, 
+  S2       = b.S2, 
+  L1       = b.L1, 
+  L2       = b.L2, 
+  dropped  = ng.token, 
+  position = ng.position, 
+  maxSim   = (1.00*b.L1-b.D)/b.L2
+FROM        samd.bernie8K(@s1,@s2) AS b
+CROSS APPLY dbo.NGrams8k(b.S2,1)   AS ng
+WHERE       b.D = 1 AND b.S1 = STUFF(b.S2,CHECKSUM(ng.position),1,'')
+ORDER BY    ng.position;
 GO
