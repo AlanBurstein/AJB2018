@@ -44,7 +44,7 @@ RETURNS TABLE AS RETURN
  1. metadata.getRoutineDefinition (function)
  2. metadata.objectReadmeSections (proc)
  3. samd.delimitedSplitAB8K_VLNO  (function)
-    3.1. dbo.NGrams8k             (function)
+    3.1. samd.NGrams8k             (function)
 
 [Developer Notes]:
  1. Returns <return value on NULL input,,a single NULL>, 
@@ -66,15 +66,15 @@ RETURNS TABLE AS RETURN
  DECLARE @routine VARCHAR(200) = 'dates.firstOfYear';
  
  SELECT r.sortKey, r.sectionName, r.sectionText, r.sectionTextXML
- FROM metadata.parseRoutineReadme(@routine) AS r;
+ FROM   metadata.parseRoutineReadme(@routine) AS r;
 
 [Sample Results]:
 --===== Query
- SELECT 
-   r.sortKey, 
-   r.sectionName, 
-   sectionText    = LEFT(REPLACE(REPLACE(r.sectionText, CHAR(10),''),CHAR(13),''), 35)+'...  ',
-   sectionTextXML = '<sectionText AS XML>'
+ SELECT r.sortKey, 
+        r.sectionName, 
+        sectionText    = LEFT(REPLACE(REPLACE(r.sectionText,CHAR(10),''),
+                         CHAR(13),''), 35)+'...  ',
+        sectionTextXML = '<sectionText AS XML>'
  FROM metadata.parseRoutineReadme('dates.firstOfYear') AS r;
 
 --===== Results:

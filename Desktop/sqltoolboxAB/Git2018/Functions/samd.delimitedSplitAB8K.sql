@@ -4,8 +4,8 @@ SET ANSI_NULLS ON
 GO
 CREATE FUNCTION [samd].[delimitedSplitAB8K]
 (
-  @string       VARCHAR(8000),
-  @delimiter    CHAR(1)
+  @string    VARCHAR(8000), -- input string
+  @delimiter CHAR(1)        -- delimiter
 )
 RETURNS TABLE WITH SCHEMABINDING AS RETURN
 /*****************************************************************************************
@@ -43,13 +43,15 @@ RETURNS TABLE WITH SCHEMABINDING AS RETURN
   item       = VARCHAR(8000); the item (token)
 
 [Dependencies]:
- Requires dbo.NGrams8K which is available here: https://goo.gl/ZHzVcw
+ Requires samd.NGrams8K which is available here: https://goo.gl/ZHzVcw
 
 [Developer Notes]:
  1. Returns a NULL item on NULL @string input 
  2. delimitedSplitAB8K is not case sensitive
  3. delimitedSplitAB8K is deterministic. For more deterministic functions see:
     https://msdn.microsoft.com/en-us/library/ms178091.aspx
+ 4. Opposite numbers can be used to circumvent a descending sort but my initial testing 
+    showed that a descending sort performed better. 
 
 [Examples]:
 --===== 1. Against a variable
@@ -60,7 +62,7 @@ RETURNS TABLE WITH SCHEMABINDING AS RETURN
 
 --===== 2. Against a table
  DECLARE @table TABLE (someId INT IDENTITY, someString VARCHAR(8000));
- INSERT  @table(someString) VALUES ('abc,123'), ('xxx,yyy'), ('1,2,3');
+ INSERT  @table(someString) VALUES ('abc,123'), ('xxx,yyy'), ('50,60,70');
 
  SELECT      t.someId, ds.itemNumber, ds.itemIndex, ds.itemLength, ds.item
  FROM        @table AS t
@@ -71,18 +73,18 @@ RETURNS TABLE WITH SCHEMABINDING AS RETURN
  Rev 00 - 20180704 - Created - Alan Burstein
 *****************************************************************************************/
 SELECT
-  itemNumber = ROW_NUMBER() OVER (ORDER BY d.p),
-  itemIndex  = CHECKSUM(ISNULL(NULLIF(d.p+l.d, 0),1)),
-  itemLength = CAST(item.ln AS INT),
-  item       = SUBSTRING(@string, d.p+l.d, item.ln)
-FROM (VALUES (DATALENGTH(@string), 1)) AS l(s,d) -- length of the string and delimiter
+  itemNumber   = ROW_NUMBER() OVER (ORDER BY d.p),
+  itemIndex    = CHECKSUM(ISNULL(NULLIF(d.p+1, 0),1)),
+  itemLength   = CHECKSUM(item.ln),
+  item         = SUBSTRING(@string, d.p+1, item.ln)
+FROM (VALUES (DATALENGTH(@string))) AS l(s) -- length of the string
 CROSS APPLY
 (
-  SELECT CAST(-l.d+1 AS BIGINT) UNION ALL -- for handling leading delimiters
+  SELECT 0 UNION ALL -- for handling leading delimiters
   SELECT ng.position
-  FROM dbo.NGrams8K(@string, l.d) AS ng
-  WHERE token = @delimiter
+  FROM   samd.NGrams8K(@string, 1) AS ng
+  WHERE  token = @delimiter
 ) AS d(p) -- delimiter.position
 CROSS APPLY (VALUES(  --LEAD(d.p, 1, l.s+l.d) OVER (ORDER BY d.p) - (d.p+l.d)
-  ISNULL(NULLIF(CHARINDEX(@delimiter,@string,d.p+l.d),0)-(d.p+l.d), l.s-d.p))) item(ln);
+  ISNULL(NULLIF(CHARINDEX(@delimiter,@string,d.p+1),0)-(d.p+1), l.s-d.p))) AS item(ln);
 GO

@@ -39,7 +39,9 @@ CREATE FUNCTION [metadata].[objectReadmeSectionDetails]
  2. metadata.parseRoutineReadme
 
 [Developer Notes]:
- 1. Returns <return value on NULL input,,a single NULL>, 
+ 1. CAN'T BE SCHEMABOUND (INFORMATION_SCHEMA)
+ 
+ Returns <return value on NULL input,,a single NULL>, 
     <return value on blank input,,No rows>. To return a single row containing a a NULL or 
     Blank row on NULL inputparameters conider using OUTER APPLY or append the function 
     with a UNION ALL "dummy row." Noe the following examples:
@@ -104,46 +106,38 @@ RETURNS TABLE AS RETURN
 WITH 
 documented AS 
 (
-  SELECT 
-    rd.routineName,
-    rd.routineType
-  FROM        INFORMATION_SCHEMA.ROUTINES                   AS r
-  CROSS APPLY metadata.getRoutineDefinition(r.ROUTINE_NAME) AS rd
-  CROSS APPLY metadata.parseRoutineReadme(rd.routineName)   AS s
-  WHERE       CHARINDEX('['+s.sectionName+']:', rd.objDef) > 0
-  GROUP BY    rd.routineName, rd.routineType
+  SELECT   rd.routineName,
+           rd.routineType
+  FROM     INFORMATION_SCHEMA.ROUTINES                   AS r
+  CROSS 
+  APPLY    metadata.getRoutineDefinition(r.ROUTINE_NAME) AS rd
+  CROSS 
+  APPLY    metadata.parseRoutineReadme(rd.routineName)   AS s
+  WHERE    CHARINDEX('['+s.sectionName+']:', rd.objDef) > 0
+  GROUP BY rd.routineName, rd.routineType
 ),
 readmeInfo AS
 (
-  SELECT
-    goodReadme = 1,
-    d.routineName,
-    d.routineType
-  FROM documented AS d
+  SELECT  goodReadme = 1, d.routineName, d.routineType
+  FROM    documented AS d
   UNION ALL
   (
-    SELECT
-      goodReadme = 0,
-      d.ROUTINE_SCHEMA+'.'+d.ROUTINE_NAME,
-      d.ROUTINE_TYPE
+    SELECT  goodReadme = 0, d.ROUTINE_SCHEMA+'.'+d.ROUTINE_NAME, d.ROUTINE_TYPE
     FROM INFORMATION_SCHEMA.ROUTINES AS d
     EXCEPT
-    SELECT
-      goodReadme = 0,
-      d.routineName,
-      d.routineType
+    SELECT goodReadme = 0, d.routineName, d.routineType
     FROM documented AS d
   )
 )
-SELECT 
-  rm.goodReadme,
-  itemNumber    = r.sortKey,
-  totalComments = COUNT(*) OVER (PARTITION BY rm.routineName ORDER BY (SELECT 1)),
-  rm.routineName,
-  rm.routineType,
-  r.sectionName, 
-  r.sectionTextXML
-FROM        readmeInfo AS rm
-OUTER APPLY metadata.parseRoutineReadme(rm.routineName) AS r
-WHERE       rm.goodReadme = @isGoodReadMe OR @isGoodReadMe IS NULL;
+SELECT rm.goodReadme,
+       itemNumber    = r.sortKey,
+       totalComments = COUNT(*) OVER (PARTITION BY rm.routineName ORDER BY (SELECT 1)),
+       rm.routineName,
+       rm.routineType,
+       r.sectionName, 
+       r.sectionTextXML
+FROM   readmeInfo AS rm
+OUTER 
+APPLY  metadata.parseRoutineReadme(rm.routineName) AS r
+WHERE  rm.goodReadme = @isGoodReadMe OR @isGoodReadMe IS NULL;
 GO

@@ -43,9 +43,14 @@ create function [dbo].[edgeNgrams8k](@string varchar(8000))
   .....
   /A/B/C/D/E
 
- SELECT * --e.itemLength, prefix
+ SELECT * --e.itemLength, e.prefix
+ FROM   dbo.edgeNgrams8k('/A/B/C/D/E/F/G') AS e
+
+ SELECT e.itemLength, e.prefix
  FROM   dbo.edgeNgrams8k('/A/B/C/D/E/F/G') AS e
  WHERE  e.itemLength % 2 = 0;
+
+
 
 ------------------------------------------------------------------------------------------
 [Revision History]:
@@ -54,11 +59,11 @@ create function [dbo].[edgeNgrams8k](@string varchar(8000))
 *****************************************************************************************/
 RETURNS TABLE WITH SCHEMABINDING AS RETURN
 SELECT
-  itemLength  = r.RN,
-  prefix      = SUBSTRING(@string, 1,    r.RN),
-  prefixOP    = SUBSTRING(@string, 1,    r.OP),
-  suffix      = SUBSTRING(@string, r.OP, r.RN),
-  suffixOP    = SUBSTRING(@string, r.RN, r.OP),
-  suffixIndex = r.OP
+  itemLength   = r.RN,
+  prefix       = SUBSTRING(@string, 1,    r.RN),
+  prefixOP     = SUBSTRING(@string, 1,    r.OP),
+  suffix       = SUBSTRING(@string, r.OP, r.RN),
+  suffixOP     = SUBSTRING(@string, r.RN, r.OP),
+  itemLengthOP = r.OP
 FROM dbo.rangeAB(1,DATALENGTH(@string),1,1) AS r;
 GO
