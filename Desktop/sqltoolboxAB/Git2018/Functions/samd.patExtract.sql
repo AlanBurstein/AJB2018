@@ -57,8 +57,8 @@ CREATE FUNCTION [samd].[patExtract]
  item       = VARCHAR(MAX); the returned text
 
 [Dependencies]:
- 1. dbo.NGrams  (iTVF) >> https://goo.gl/cXF9Gi 
- 2. dbo.rangeAB (iTVF, required for dbo.NGrams) 
+ 1. samd.NGrams  (iTVF) >> https://goo.gl/cXF9Gi 
+ 2. dbo.rangeAB (iTVF, required for samd.NGrams) 
 
 [Developer Notes]:
  1. patExtract does not return any rows on NULL or empty strings. Consider using 
@@ -96,24 +96,22 @@ CREATE FUNCTION [samd].[patExtract]
    FROM temp t
    CROSS APPLY samd.patExtract(t.txt, '[^0-9]') pe;
 ---------------------------------------------------------------------------------------
-Revision History:
+[Revision History]:
  Rev 00 - 20180704 - Initial Development - Alan Burstein
 ****************************************************************************************/
 RETURNS TABLE WITH SCHEMABINDING AS RETURN
-SELECT
- itemNumber = ROW_NUMBER() OVER (ORDER BY f.position),
- itemIndex  = f.position,
- itemLength = itemLen.l,
- item       = SUBSTRING(f.token, 1, itemLen.l)
+SELECT itemNumber = ROW_NUMBER() OVER (ORDER BY f.position),
+       itemIndex  = f.position,
+       itemLength = itemLen.l,
+       item       = SUBSTRING(f.token, 1, itemLen.l)
 FROM
 (
  SELECT ng.position, SUBSTRING(@string, ng.position, DATALENGTH(@string))
- FROM dbo.NGrams(@string, 1) ng
- WHERE 
-   PATINDEX(@pattern, ng.token) <  --<< this token does NOT match the pattern
-   ABS(SIGN(ng.position-1)-1) +    --<< are you the first row?  OR
-   PATINDEX(@pattern,SUBSTRING(@string,ng.position-1,1)) --<< always 0 for 1st row
-) f(position, token)
+ FROM   samd.NGrams(@string, 1) AS ng
+ WHERE  PATINDEX(@pattern, ng.token) <  --<< this token does NOT match the pattern
+        ABS(SIGN(ng.position-1)-1) +    --<< are you the first row?  OR
+        PATINDEX(@pattern,SUBSTRING(@string,ng.position-1,1)) --<< always 0 for 1st row
+) AS f(position, token)
 CROSS APPLY (VALUES(ISNULL(NULLIF(PATINDEX('%'+@pattern+'%',f.token),0),
-  DATALENGTH(@string)+2-f.position)-1)) itemLen(l);
+  DATALENGTH(@string)+2-f.position)-1)) AS itemLen(l);
 GO

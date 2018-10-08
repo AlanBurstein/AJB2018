@@ -13,9 +13,6 @@ CREATE FUNCTION [samd].[NGrams8k]
  based on an input string (@string). Accepts strings up to 8000 varchar characters long.
  For more information about N-Grams see: http://en.wikipedia.org/wiki/N-gram.
 
- Updated 20180912 to enable developers to return tokens in descending order without a
- performance penalty. 
-
 [Author]: 
   Alan Burstein
 
@@ -70,17 +67,9 @@ CREATE FUNCTION [samd].[NGrams8k]
 
 [Examples]:
 --===== 1. Split the string, "abcd" into unigrams, bigrams and trigrams
-
- --===== 1.1. Ascending order by position (no sort)
  SELECT ng.position, ng.token FROM samd.NGrams8k('abcd',1) AS ng; -- unigrams (@N=1)
  SELECT ng.position, ng.token FROM samd.NGrams8k('abcd',2) AS ng; -- bigrams  (@N=2)
  SELECT ng.position, ng.token FROM samd.NGrams8k('abcd',3) AS ng; -- trigrams (@N=3)
-
- --===== 1.2. Descending order by position (no sort)
- SELECT ng.positionOP, ng.tokenOP FROM samd.NGrams8k('abcd',1) AS ng; -- unigrams (@N=1)
- SELECT ng.positionOP, ng.tokenOP FROM samd.NGrams8k('abcd',2) AS ng; -- bigrams  (@N=2)
- SELECT ng.positionOP, ng.tokenOP FROM samd.NGrams8k('abcd',3) AS ng; -- trigrams (@N=3)
-
 
 --===== How many times the substring "AB" appears in each record
  DECLARE @table TABLE(stringID int identity primary key, string varchar(100));
@@ -109,15 +98,12 @@ CREATE FUNCTION [samd].[NGrams8k]
                 (ABS(CONVERT(BIGINT,(DATALENGTH(ISNULL(@string,''))+1-ISNULL(@N,1)),0)))
  Rev 06 - 20180612 - Using CHECKSUM(N) in the to convert N in the token output instead of
                      using (CAST N as int). CHECKSUM removes the need to convert to int.
- Rev 07 - 20180612 - re-designed to: (1) use dbo.rangeAB, (2) accomidate descending sorts
-                     without a performance penalty. 
+ Rev 07 - 20180612 - re-designed to: (1) use dbo.rangeAB - Alan Burstein
 ****************************************************************************************/
 RETURNS TABLE WITH SCHEMABINDING AS RETURN
 SELECT
   position   = r.RN,
-  token      = SUBSTRING(@string, CHECKSUM(r.RN), @N),
-  positionOP = r.OP,
-  tokenOP    = SUBSTRING(@string, CHECKSUM(r.OP), @N)
+  token      = SUBSTRING(@string, CHECKSUM(r.RN), @N)
 FROM  dbo.rangeAB(1, LEN(@string)+1-@N,1,1) AS r
 WHERE @N > 0 AND @N <= LEN(@string);
 GO
